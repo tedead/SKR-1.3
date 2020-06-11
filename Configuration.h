@@ -36,7 +36,7 @@
  * Advanced settings can be found in Configuration_adv.h
  *
  */
-#define CONFIGURATION_H_VERSION 020005
+#define CONFIGURATION_H_VERSION 020207
 
 //===========================================================================
 //============================= Getting Started =============================
@@ -69,7 +69,7 @@
 //
 
 // @section info
-
+//#define SOFT_SERIAL
 // Author info of this build printed to the host during boot and M115
 #define STRING_CONFIG_H_AUTHOR "tedead" // Who made the changes.
 //#define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
@@ -110,7 +110,9 @@
  * Select a secondary serial port on the board to use for communication with the host.
  * :[-1, 0, 1, 2, 3, 4, 5, 6, 7]
  */
-//#define SERIAL_PORT_2 1
+#define SERIAL_PORT_2 -1
+//#define SERIAL_PORT_3 2
+//#define SERIAL_PORT_4 3
 
 /**
  * This setting determines the communication speed of the printer.
@@ -121,10 +123,10 @@
  *
  * :[2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
  */
-#define BAUDRATE 250000
+#define BAUDRATE 115200
 
 // Enable the Bluetooth serial interface on AT90USB devices
-//#define BLUETOOTH
+#define BLUETOOTH
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
@@ -132,7 +134,7 @@
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
-//#define CUSTOM_MACHINE_NAME "3D Printer"
+#define CUSTOM_MACHINE_NAME "Sloane Special"
 
 // Printer's unique ID, used by some programs to differentiate between machines.
 // Choose your own or use a service like http://www.uuidgenerator.net/version4
@@ -450,15 +452,15 @@
 // Above this temperature the heater will be switched off.
 // This can protect components from overheating, but NOT from shorts and failures.
 // (Use MINTEMP for thermistor short/failure protection.)
-#define HEATER_0_MAXTEMP 255
-#define HEATER_1_MAXTEMP 255
-#define HEATER_2_MAXTEMP 255
-#define HEATER_3_MAXTEMP 255
-#define HEATER_4_MAXTEMP 255
-#define HEATER_5_MAXTEMP 255
-#define HEATER_6_MAXTEMP 255
-#define HEATER_7_MAXTEMP 255
-#define BED_MAXTEMP      110
+#define HEATER_0_MAXTEMP 275
+#define HEATER_1_MAXTEMP 275
+#define HEATER_2_MAXTEMP 275
+#define HEATER_3_MAXTEMP 275
+#define HEATER_4_MAXTEMP 275
+#define HEATER_5_MAXTEMP 275
+#define HEATER_6_MAXTEMP 275
+#define HEATER_7_MAXTEMP 275
+#define BED_MAXTEMP      120
 
 //===========================================================================
 //============================= PID Settings ================================
@@ -730,14 +732,14 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 98 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 99.5 }
 
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 1000, 1000, 90, 100 }
+#define DEFAULT_MAX_FEEDRATE          { 1000, 1000, 360, 100 } //Z was 90
 
 //#define LIMITED_MAX_FR_EDITING        // Limit edit via M203 or LCD to DEFAULT_MAX_FEEDRATE * 2
 #if ENABLED(LIMITED_MAX_FR_EDITING)
@@ -750,7 +752,7 @@
  * Override with M201
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 100, 10000 }
+#define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 1000, 10000 } //Z was 100
 
 //#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
@@ -820,7 +822,7 @@
 // @section probes
 
 //
-// See http://marlinfw.org/docs/configuration/probes.html
+// See https://marlinfw.org/docs/configuration/probes.html
 //
 
 /**
@@ -956,7 +958,7 @@
  *
  * Specify a Probe position as { X, Y, Z }
  */
-#define NOZZLE_TO_PROBE_OFFSET { -43, -13, -0.7 }
+#define NOZZLE_TO_PROBE_OFFSET { -43, -13, -1.00 }
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
@@ -981,7 +983,7 @@
  * A total of 3 or more adds more slow probes, taking the average.
  */
 #define MULTIPLE_PROBING 2
-#define EXTRA_PROBING    1
+//#define EXTRA_PROBING    1
 
 /**
  * Z probes require clearance when deploying, stowing, and moving between
@@ -1000,7 +1002,7 @@
 #define Z_CLEARANCE_DEPLOY_PROBE   10 // Z Clearance for Deploy/Stow
 #define Z_CLEARANCE_BETWEEN_PROBES  5 // Z Clearance between probe points
 #define Z_CLEARANCE_MULTI_PROBE     5 // Z Clearance between multiple probes
-//#define Z_AFTER_PROBING           5 // Z position after probing is done
+#define Z_AFTER_PROBING           0 // Z position after probing is done
 
 #define Z_PROBE_LOW_POINT          -10 // Farthest distance below the trigger-point to go before stopping
 
@@ -1056,14 +1058,14 @@
 // @section machine
 
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
-#define INVERT_X_DIR true
-#define INVERT_Y_DIR true
+#define INVERT_X_DIR true //false
+#define INVERT_Y_DIR true //true
 #define INVERT_Z_DIR false
 
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#define INVERT_E0_DIR true
+#define INVERT_E0_DIR true //false
 #define INVERT_E1_DIR false
 #define INVERT_E2_DIR false
 #define INVERT_E3_DIR false
@@ -1219,7 +1221,7 @@
  * Turn on with the command 'M111 S32'.
  * NOTE: Requires a lot of PROGMEM!
  */
-#define DEBUG_LEVELING_FEATURE
+//#define DEBUG_LEVELING_FEATURE
 
 #if ANY(MESH_BED_LEVELING, AUTO_BED_LEVELING_BILINEAR, AUTO_BED_LEVELING_UBL)
   // Gradually reduce leveling correction until a set height is reached,
@@ -1320,13 +1322,13 @@
 #endif
 
 // Add a menu item to move between bed corners for manual bed adjustment
-//#define LEVEL_BED_CORNERS
+#define LEVEL_BED_CORNERS
 
 #if ENABLED(LEVEL_BED_CORNERS)
   #define LEVEL_CORNERS_INSET_LFRB { 30, 30, 30, 30 } // (mm) Left, Front, Right, Back insets
   #define LEVEL_CORNERS_HEIGHT      0.0   // (mm) Z height of nozzle at leveling points
   #define LEVEL_CORNERS_Z_HOP       4.0   // (mm) Z height of nozzle between leveling points
-  //#define LEVEL_CENTER_TOO              // Move to the center after the last corner
+  #define LEVEL_CENTER_TOO              // Move to the center after the last corner
 #endif
 
 /**
@@ -1636,7 +1638,7 @@
  *  - Click the controller to view the LCD menu
  *  - The LCD will display Japanese, Western, or Cyrillic text
  *
- * See http://marlinfw.org/docs/development/lcd_language.html
+ * See https://marlinfw.org/docs/development/lcd_language.html
  *
  * :['JAPANESE', 'WESTERN', 'CYRILLIC']
  */
@@ -1696,7 +1698,7 @@
 // Use this option to override the number of step signals required to
 // move between next/prev menu items.
 //
-#define ENCODER_STEPS_PER_MENU_ITEM 2
+//#define ENCODER_STEPS_PER_MENU_ITEM 2
 
 /**
  * Encoder Direction Options
@@ -1713,7 +1715,7 @@
 //
 //  Set this option if CLOCKWISE causes values to DECREASE
 //
-#define REVERSE_ENCODER_DIRECTION
+//#define REVERSE_ENCODER_DIRECTION
 
 //
 // This option reverses the encoder direction for navigating LCD menus.
@@ -2164,7 +2166,6 @@
 //#define PCA9632
 
 // Support for PCA9533 PWM LED driver
-// https://github.com/mikeshub/SailfishRGB_LED
 //#define PCA9533
 
 /**

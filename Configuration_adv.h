@@ -31,7 +31,7 @@
  * Basic settings can be found in Configuration.h
  *
  */
-#define CONFIGURATION_ADV_H_VERSION 020005
+#define CONFIGURATION_ADV_H_VERSION 020207
 
 // @section temperature
 
@@ -340,7 +340,6 @@
  *
  * The fan turns on automatically whenever any driver is enabled and turns
  * off (or reduces to idle speed) shortly after drivers are turned off.
- *
  */
 //#define USE_CONTROLLER_FAN
 #if ENABLED(USE_CONTROLLER_FAN)
@@ -420,7 +419,7 @@
  * Multiple extruders can be assigned to the same pin in which case
  * the fan will turn on when any selected extruder is above the threshold.
  */
-#define E0_AUTO_FAN_PIN P2_04 //-1
+#define E0_AUTO_FAN_PIN P2_04
 #define E1_AUTO_FAN_PIN -1
 #define E2_AUTO_FAN_PIN -1
 #define E3_AUTO_FAN_PIN -1
@@ -992,7 +991,7 @@
 #endif // HAS_LCD_MENU
 
 // Scroll a longer status message into view
-//#define STATUS_MESSAGE_SCROLLING
+#define STATUS_MESSAGE_SCROLLING
 
 // On the Info Screen, display XY with one decimal place when possible
 //#define LCD_DECIMAL_SMALL_XY
@@ -1004,15 +1003,15 @@
 //#define LCD_SET_PROGRESS_MANUALLY
 
 // Show the E position (filament used) during printing
-//#define LCD_SHOW_E_TOTAL
+#define LCD_SHOW_E_TOTAL
 
 #if ENABLED(SHOW_BOOTSCREEN)
   #define BOOTSCREEN_TIMEOUT 4000        // (ms) Total Duration to display the boot screen(s)
 #endif
 
 #if HAS_GRAPHICAL_LCD && EITHER(SDSUPPORT, LCD_SET_PROGRESS_MANUALLY)
-  //#define PRINT_PROGRESS_SHOW_DECIMALS // Show progress with decimal digits
-  //#define SHOW_REMAINING_TIME          // Display estimated time to completion
+  #define PRINT_PROGRESS_SHOW_DECIMALS // Show progress with decimal digits
+  #define SHOW_REMAINING_TIME          // Display estimated time to completion
   #if ENABLED(SHOW_REMAINING_TIME)
     //#define USE_M73_REMAINING_TIME     // Use remaining time from M73 command instead of estimation
     //#define ROTATE_PROGRESS_DISPLAY    // Display (P)rogress, (E)lapsed, and (R)emaining time
@@ -1036,8 +1035,10 @@
   // Enable this option and set to HIGH if your SD cards are incorrectly detected.
   //#define SD_DETECT_STATE HIGH
 
-  #define SD_FINISHED_STEPPERRELEASE true          // Disable steppers when SD Print is finished
-  #define SD_FINISHED_RELEASECOMMAND "M84 X Y Z E" // You might want to keep the Z enabled so your bed stays in place.
+  #define SD_PROCEDURE_DEPTH 1              // Increase if you need more nested M32 calls
+
+  #define SD_FINISHED_STEPPERRELEASE true   // Disable steppers when SD Print is finished
+  #define SD_FINISHED_RELEASECOMMAND "M84"  // Use "M84XYE" to keep Z enabled so your bed stays in place
 
   // Reverse SD sort to show "more recent" files first, according to the card's FAT.
   // Since the FAT gets out of order with usage, SDCARD_SORT_ALPHA is recommended.
@@ -1060,13 +1061,10 @@
    * during SD printing. If the recovery file is found at boot time, present
    * an option on the LCD screen to continue the print from the last-known
    * point in the file.
-   *
-   * If the machine reboots when resuming a print you may need to replace or
-   * reformat the SD card. (Bad sectors delay startup triggering the watchdog.)
    */
-  //#define POWER_LOSS_RECOVERY
+  #define POWER_LOSS_RECOVERY
   #if ENABLED(POWER_LOSS_RECOVERY)
-    #define PLR_ENABLED_DEFAULT   false // Power Loss Recovery enabled by default. (Set with 'M413 Sn' & M500)
+    #define PLR_ENABLED_DEFAULT   true // Power Loss Recovery enabled by default. (Set with 'M413 Sn' & M500)
     //#define BACKUP_POWER_SUPPLY       // Backup power / UPS to move the steppers on power loss
     //#define POWER_LOSS_ZRAISE       2 // (mm) Z axis raise on resume (on power loss with UPS)
     //#define POWER_LOSS_PIN         44 // Pin to detect power loss. Set to -1 to disable default pin on boards without module.
@@ -1122,7 +1120,7 @@
   //#define LONG_FILENAME_HOST_SUPPORT
 
   // Enable this option to scroll long filenames in the SD card menu
-  //#define SCROLL_LONG_FILENAMES
+  #define SCROLL_LONG_FILENAMES
 
   // Leave the heaters on after Stop Print (not recommended!)
   //#define SD_ABORT_NO_COOLDOWN
@@ -1206,7 +1204,7 @@
    *
    * :[ 'LCD', 'ONBOARD', 'CUSTOM_CABLE' ]
    */
-  //#define SDCARD_CONNECTION LCD
+  #define SDCARD_CONNECTION ONBOARD
 
 #endif // SDSUPPORT
 
@@ -1287,7 +1285,7 @@
   //#define STATUS_ALT_BED_BITMAP     // Use the alternative bed bitmap
   //#define STATUS_ALT_FAN_BITMAP     // Use the alternative fan bitmap
   //#define STATUS_FAN_FRAMES 3       // :[0,1,2,3,4] Number of fan animation frames
-  #define STATUS_HEAT_PERCENT       // Show heating in a progress bar
+  //#define STATUS_HEAT_PERCENT       // Show heating in a progress bar
   //#define BOOT_MARLIN_LOGO_SMALL    // Show a smaller Marlin logo on the Boot Screen (saving 399 bytes of flash)
   //#define BOOT_MARLIN_LOGO_ANIMATED // Animated Marlin logo. Costs ~‭3260 (or ~940) bytes of PROGMEM.
 
@@ -1468,11 +1466,11 @@
  *
  * Warning: Does not respect endstops!
  */
-//#define BABYSTEPPING
+#define BABYSTEPPING
 #if ENABLED(BABYSTEPPING)
   //#define INTEGRATED_BABYSTEPPING         // EXPERIMENTAL integration of babystepping into the Stepper ISR
   //#define BABYSTEP_WITHOUT_HOMING
-  //#define BABYSTEP_XY                     // Also enable X/Y Babystepping. Not supported on DELTA!
+  #define BABYSTEP_XY                     // Also enable X/Y Babystepping. Not supported on DELTA!
   #define BABYSTEP_INVERT_Z false           // Change if Z babysteps should go the other way
   #define BABYSTEP_MULTIPLICATOR_Z  1       // Babysteps are very small. Increase for faster motion.
   #define BABYSTEP_MULTIPLICATOR_XY 1
@@ -1490,7 +1488,7 @@
 
   //#define BABYSTEP_DISPLAY_TOTAL          // Display total babysteps since last G28
 
-  //#define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
+  #define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
   #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
     //#define BABYSTEP_HOTEND_Z_OFFSET      // For multiple hotends, babystep relative Z offsets
     //#define BABYSTEP_ZPROBE_GFX_OVERLAY   // Enable graphical overlay on Z-offset editor
@@ -1512,13 +1510,13 @@
  * If this algorithm produces a higher speed offset than the extruder can handle (compared to E jerk)
  * print acceleration will be reduced during the affected moves to keep within the limit.
  *
- * See http://marlinfw.org/docs/features/lin_advance.html for full instructions.
+ * See https://marlinfw.org/docs/features/lin_advance.html for full instructions.
  * Mention @Sebastianv650 on GitHub to alert the author of any issues.
  */
 #define LIN_ADVANCE
 #if ENABLED(LIN_ADVANCE)
   //#define EXTRA_LIN_ADVANCE_K // Enable for second linear advance constants
-  #define LIN_ADVANCE_K 0.00 //0.22    // Unit: mm compression per 1mm/s extruder speed
+  #define LIN_ADVANCE_K 0.06 //0.22    // Unit: mm compression per 1mm/s extruder speed
   //#define LA_DEBUG            // If enabled, this will generate debug information output over USB.
 #endif
 
@@ -1600,18 +1598,11 @@
   // Add additional compensation depending on hotend temperature
   // Note: this values cannot be calibrated and have to be set manually
   #if ENABLED(PROBE_TEMP_COMPENSATION)
-    // Max temperature that can be reached by heated bed.
-    // This is required only for the calibration process.
-    #define PTC_MAX_BED_TEMP BED_MAXTEMP
-
     // Park position to wait for probe cooldown
-    #define PTC_PARK_POS_X 0.0F
-    #define PTC_PARK_POS_Y 0.0F
-    #define PTC_PARK_POS_Z 100.0F
+    #define PTC_PARK_POS   { 0, 0, 100 }
 
     // Probe position to probe and wait for probe to reach target temperature
-    #define PTC_PROBE_POS_X  90.0F
-    #define PTC_PROBE_POS_Y 100.0F
+    #define PTC_PROBE_POS  { 90, 100 }
 
     // Enable additional compensation using hotend temperature
     // Note: this values cannot be calibrated automatically but have to be set manually
@@ -1672,8 +1663,8 @@
  *
  * Override the default value based on the driver type set in Configuration.h.
  */
-//#define MINIMUM_STEPPER_POST_DIR_DELAY 650
-//#define MINIMUM_STEPPER_PRE_DIR_DELAY 650
+//#define MINIMUM_STEPPER_POST_DIR_DELAY 20
+//#define MINIMUM_STEPPER_PRE_DIR_DELAY 20
 
 /**
  * Minimum stepper driver pulse width (in µs)
@@ -1686,7 +1677,7 @@
  *
  * Override the default value based on the driver type set in Configuration.h.
  */
-//#define MINIMUM_STEPPER_PULSE 2
+//#define MINIMUM_STEPPER_PULSE 0
 
 /**
  * Maximum stepping rate (in Hz) the stepper driver allows
@@ -1700,7 +1691,7 @@
  *
  * Override the default value based on the driver type set in Configuration.h.
  */
-//#define MAXIMUM_STEPPER_RATE 250000
+//#define MAXIMUM_STEPPER_RATE 5000000
 
 // @section temperature
 
@@ -1774,7 +1765,7 @@
 //#define NO_TIMEOUTS 1000 // Milliseconds
 
 // Some clients will have this feature soon. This could make the NO_TIMEOUTS unnecessary.
-#define ADVANCED_OK
+//#define ADVANCED_OK
 
 // Printrun may have trouble receiving long strings all at once.
 // This option inserts short delays between lines of serial output.
@@ -2282,16 +2273,16 @@
    * STEALTHCHOP_(XY|Z|E) must be enabled to use HYBRID_THRESHOLD.
    * M913 X/Y/Z/E to live tune the setting
    */
-  //#define HYBRID_THRESHOLD
+  #define HYBRID_THRESHOLD
 
-  #define X_HYBRID_THRESHOLD     100  // [mm/s]
-  #define X2_HYBRID_THRESHOLD    100
-  #define Y_HYBRID_THRESHOLD     100
-  #define Y2_HYBRID_THRESHOLD    100
-  #define Z_HYBRID_THRESHOLD       3
-  #define Z2_HYBRID_THRESHOLD      3
-  #define Z3_HYBRID_THRESHOLD      3
-  #define Z4_HYBRID_THRESHOLD      3
+  #define X_HYBRID_THRESHOLD     200  // [mm/s]
+  #define X2_HYBRID_THRESHOLD    200
+  #define Y_HYBRID_THRESHOLD     200
+  #define Y2_HYBRID_THRESHOLD    200
+  #define Z_HYBRID_THRESHOLD       9
+  #define Z2_HYBRID_THRESHOLD      9
+  #define Z3_HYBRID_THRESHOLD      9
+  #define Z4_HYBRID_THRESHOLD      9
   #define E0_HYBRID_THRESHOLD     30
   #define E1_HYBRID_THRESHOLD     30
   #define E2_HYBRID_THRESHOLD     30
@@ -2340,7 +2331,7 @@
    * Beta feature!
    * Create a 50/50 square wave step pulse optimal for stepper drivers.
    */
-  //#define SQUARE_WAVE_STEPPING
+  #define SQUARE_WAVE_STEPPING
 
   /**
    * Enable M122 debugging command for TMC stepper drivers.
@@ -2654,7 +2645,7 @@
  * You'll need to select a pin for the ON/OFF function and optionally choose a 0-5V
  * hardware PWM pin for the speed control and a pin for the rotation direction.
  *
- * See http://marlinfw.org/docs/configuration/laser_spindle.html for more config details.
+ * See https://marlinfw.org/docs/configuration/laser_spindle.html for more config details.
  */
 //#define SPINDLE_FEATURE
 //#define LASER_FEATURE
@@ -2662,31 +2653,123 @@
   #define SPINDLE_LASER_ACTIVE_HIGH     false  // Set to "true" if the on/off function is active HIGH
   #define SPINDLE_LASER_PWM             true   // Set to "true" if your controller supports setting the speed/power
   #define SPINDLE_LASER_PWM_INVERT      true   // Set to "true" if the speed/power goes up when you want it to go slower
-  #define SPINDLE_LASER_POWERUP_DELAY   5000   // (ms) Delay to allow the spindle/laser to come up to speed/power
-  #define SPINDLE_LASER_POWERDOWN_DELAY 5000   // (ms) Delay to allow the spindle to stop
+
+  #define SPINDLE_LASER_FREQUENCY       2500   // (Hz) Spindle/laser frequency (only on supported HALs: AVR and LPC)
+
+  /**
+   * Speed / Power can be set ('M3 S') and displayed in terms of:
+   *  - PWM     (S0 - S255)
+   *  - PERCENT (S0 - S100)
+   *  - RPM     (S0 - S50000)  Best for use with a spindle
+   */
+  #define CUTTER_POWER_DISPLAY PWM
+
+  /**
+   * Relative mode uses relative range (SPEED_POWER_MIN to SPEED_POWER_MAX) instead of normal range (0 to SPEED_POWER_MAX)
+   * Best use with SuperPID router controller where for example S0 = 5,000 RPM and S255 = 30,000 RPM
+   */
+  //#define CUTTER_POWER_RELATIVE              // Set speed proportional to [SPEED_POWER_MIN...SPEED_POWER_MAX] instead of directly
 
   #if ENABLED(SPINDLE_FEATURE)
     //#define SPINDLE_CHANGE_DIR               // Enable if your spindle controller can change spindle direction
     #define SPINDLE_CHANGE_DIR_STOP            // Enable if the spindle should stop before changing spin direction
     #define SPINDLE_INVERT_DIR          false  // Set to "true" if the spin direction is reversed
 
+    #define SPINDLE_LASER_POWERUP_DELAY   5000 // (ms) Delay to allow the spindle/laser to come up to speed/power
+    #define SPINDLE_LASER_POWERDOWN_DELAY 5000 // (ms) Delay to allow the spindle to stop
+
     /**
-     *  The M3 & M4 commands use the following equation to convert PWM duty cycle to speed/power
+     * M3/M4 uses the following equation to convert speed/power to PWM duty cycle
+     * Power = ((DC / 255 * 100) - SPEED_POWER_INTERCEPT)) * (1 / SPEED_POWER_SLOPE)
+     *   where PWM DC varies from 0 to 255
      *
-     *  SPEED/POWER = PWM duty cycle * SPEED_POWER_SLOPE + SPEED_POWER_INTERCEPT
-     *    where PWM duty cycle varies from 0 to 255
-     *
-     *  set the following for your controller (ALL MUST BE SET)
+     * Set these required parameters for your controller
      */
-    #define SPEED_POWER_SLOPE    118.4
-    #define SPEED_POWER_INTERCEPT  0
-    #define SPEED_POWER_MIN     5000
-    #define SPEED_POWER_MAX    30000    // SuperPID router controller 0 - 30,000 RPM
+    #define SPEED_POWER_SLOPE           118.4  // SPEED_POWER_SLOPE = SPEED_POWER_MAX / 255
+    #define SPEED_POWER_INTERCEPT         0
+    #define SPEED_POWER_MIN            5000
+    #define SPEED_POWER_MAX           30000    // SuperPID router controller 0 - 30,000 RPM
+    #define SPEED_POWER_STARTUP       25000    // The default value for speed power when M3 is called without arguments
+
   #else
-    #define SPEED_POWER_SLOPE      0.3922
-    #define SPEED_POWER_INTERCEPT  0
-    #define SPEED_POWER_MIN       10
-    #define SPEED_POWER_MAX      100    // 0-100%
+
+    #define SPEED_POWER_SLOPE             0.3922 // SPEED_POWER_SLOPE = SPEED_POWER_MAX / 255
+    #define SPEED_POWER_INTERCEPT         0
+    #define SPEED_POWER_MIN               0
+    #define SPEED_POWER_MAX             100    // 0-100%
+    #define SPEED_POWER_STARTUP          80    // The default value for speed power when M3 is called without arguments
+
+    /**
+     * Enable inline laser power to be handled in the planner / stepper routines.
+     * Inline power is specified by the I (inline) flag in an M3 command (e.g., M3 S20 I)
+     * or by the 'S' parameter in G0/G1/G2/G3 moves (see LASER_MOVE_POWER).
+     *
+     * This allows the laser to keep in perfect sync with the planner and removes
+     * the powerup/down delay since lasers require negligible time.
+     */
+    #define LASER_POWER_INLINE
+
+    #if ENABLED(LASER_POWER_INLINE)
+      /**
+       * Scale the laser's power in proportion to the movement rate.
+       *
+       * - Sets the entry power proportional to the entry speed over the nominal speed.
+       * - Ramps the power up every N steps to approximate the speed trapezoid.
+       * - Due to the limited power resolution this is only approximate.
+       */
+      #define LASER_POWER_INLINE_TRAPEZOID
+
+      /**
+       * Continuously calculate the current power (nominal_power * current_rate / nominal_rate).
+       * Required for accurate power with non-trapezoidal acceleration (e.g., S_CURVE_ACCELERATION).
+       * This is a costly calculation so this option is discouraged on 8-bit AVR boards.
+       *
+       * LASER_POWER_INLINE_TRAPEZOID_CONT_PER defines how many step cycles there are between power updates. If your
+       * board isn't able to generate steps fast enough (and you are using LASER_POWER_INLINE_TRAPEZOID_CONT), increase this.
+       * Note that when this is zero it means it occurs every cycle; 1 means a delay wait one cycle then run, etc.
+       */
+      //#define LASER_POWER_INLINE_TRAPEZOID_CONT
+
+      /**
+       * Stepper iterations between power updates. Increase this value if the board
+       * can't keep up with the processing demands of LASER_POWER_INLINE_TRAPEZOID_CONT.
+       * Disable (or set to 0) to recalculate power on every stepper iteration.
+       */
+      //#define LASER_POWER_INLINE_TRAPEZOID_CONT_PER 10
+
+      /**
+       * Include laser power in G0/G1/G2/G3/G5 commands with the 'S' parameter
+       */
+      //#define LASER_MOVE_POWER
+
+      #if ENABLED(LASER_MOVE_POWER)
+        // Turn off the laser on G0 moves with no power parameter.
+        // If a power parameter is provided, use that instead.
+        //#define LASER_MOVE_G0_OFF
+      #endif
+
+      /**
+       * Inline flag inverted
+       *
+       * WARNING: M5 will NOT turn off the laser unless another move
+       *          is done (so G-code files must end with 'M5 I').
+       */
+      //#define LASER_POWER_INLINE_INVERT
+
+      /**
+       * Continuously apply inline power. ('M3 S3' == 'G1 S3' == 'M3 S3 I')
+       *
+       * The laser might do some weird things, so only enable this
+       * feature if you understand the implications.
+       */
+      //#define LASER_POWER_INLINE_CONTINUOUS
+
+    #else
+
+      #define SPINDLE_LASER_POWERUP_DELAY     50 // (ms) Delay to allow the spindle/laser to come up to speed/power
+      #define SPINDLE_LASER_POWERDOWN_DELAY   50 // (ms) Delay to allow the spindle to stop
+
+    #endif
   #endif
 #endif
 
@@ -3044,11 +3127,11 @@
  * WiFi Support (Espressif ESP32 WiFi)
  */
 //#define WIFISUPPORT         // Marlin embedded WiFi managenent
-//#define ESP3D_WIFISUPPORT   // ESP3D Library WiFi management (https://github.com/luc-github/ESP3DLib)
+#define ESP3D_WIFISUPPORT   // ESP3D Library WiFi management (https://github.com/luc-github/ESP3DLib)
 
 #if EITHER(WIFISUPPORT, ESP3D_WIFISUPPORT)
-  //#define WEBSUPPORT          // Start a webserver (which may include auto-discovery)
-  //#define OTASUPPORT          // Support over-the-air firmware updates
+  #define WEBSUPPORT          // Start a webserver (which may include auto-discovery)
+  #define OTASUPPORT          // Support over-the-air firmware updates
   //#define WIFI_CUSTOM_COMMAND // Accept feature config commands (e.g., WiFi ESP3D) from the host
 
   /**
@@ -3059,7 +3142,7 @@
    *   #define WIFI_SSID "WiFi SSID"
    *   #define WIFI_PWD  "WiFi Password"
    */
-  //#include "Configuration_Secure.h" // External file with WiFi SSID / Password
+  #include "Configuration_Secure.h" // External file with WiFi SSID / Password
 #endif
 
 /**
